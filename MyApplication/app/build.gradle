@@ -21,6 +21,15 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        checked {
+            initWith debug
+            applicationIdSuffix ".checked"
+
+            javaCompileOptions.annotationProcessorOptions {
+                classNames.add("org.checkerframework.checker.nullness.NullnessChecker")
+                arguments.put("nocheckjdk", "")
+            }
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -33,6 +42,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation "org.checkerframework:checker-qual-android:3.10.0"
+    annotationProcessor "org.checkerframework:checker:3.10.0"
+    implementation "com.google.auto.value:auto-value-annotations:1.7.4"
+    annotationProcessor "com.google.auto.value:auto-value:1.7.4"
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

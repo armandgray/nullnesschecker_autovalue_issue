@@ -1,14 +1,25 @@
 package com.example.myapplication;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.google.auto.value.AutoValue;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    @AutoValue
+    static abstract class Foo {
+
+        static Foo create() {
+            return new AutoValue_MainActivity_Foo();
+        }
     }
 }
