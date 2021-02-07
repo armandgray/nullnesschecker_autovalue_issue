@@ -5,6 +5,7 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/myapplication
     docker:
       - image: circleci/android:api-27
     environment:
@@ -13,6 +14,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
       - run:
           name: Download Dependencies
@@ -20,7 +23,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
+          key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
       - run:
           name: Run Lint Test
           command: ./gradlew lint
