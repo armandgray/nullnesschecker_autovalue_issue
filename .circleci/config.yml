@@ -1,0 +1,32 @@
+# Android CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-android/ for more details
+#
+version: 2
+jobs:
+  build:
+    working_directory: ~/MyApplication
+    docker:
+      - image: circleci/android:api-27
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "MyApplication/build.gradle" }}-{{ checksum "MyApplication/app/build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run:
+          name: Download Dependencies
+          command: cd MyApplication;./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "MyApplication/build.gradle" }}-{{ checksum "MyApplication/app/build.gradle" }}
+
+      - run:
+          name: Run Lint Test
+          command: cd MyApplication;./gradlew lint
+      - store_artifacts:
+          path: lint/build/artifacts
